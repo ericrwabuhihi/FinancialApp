@@ -1,0 +1,75 @@
+﻿@model FinancialApp.Models.Household
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@*<h2>Details</h2>*@
+
+<div>
+    @*<h4>Household</h4>*@
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Household Name:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+    </dl>
+</div>
+@*<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>*@
+
+
+@*<h4>Add new Account</h4>*@
+
+<p>
+    @Html.ActionLink("Add account", "Create", "FinancialAccounts", new { id = Model.Id }, null  )
+
+</p>
+<table class="table">
+    <tr>
+        @*<th>
+            Household
+        </th>*@
+        <th>
+            Account
+        </th>
+        <th>
+            Balance
+        </th>
+        <th>
+            Action
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.FinancialAccounts)
+    {
+        <tr>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Household.Name)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Balance)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.ReconciledBalance)
+            </td>*@
+            <td>
+                @Html.ActionLink("Edit", "Edit","FinancialAccounts", new { id = item.Id }, null) |
+                @Html.ActionLink("Details", "Details", "FinancialAccounts", new { id = item.Id }, null) |
+              @Html.ActionLink("Delete", "Delete", "FinancialAccounts", new { id = item.Id }, null) |
+            </td>
+        </tr>
+    }
+
+</table>

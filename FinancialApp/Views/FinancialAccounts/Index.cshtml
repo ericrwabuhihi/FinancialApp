@@ -1,0 +1,53 @@
+﻿@model IEnumerable<FinancialApp.Models.FinancialAccount>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h3> List of Accounts</h3>
+
+@*<h4>Add new Account</h4>*@
+
+<p>
+    @Html.ActionLink("Add account", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+          Household 
+        </th>
+        <th>
+           Account
+        </th>
+        <th>
+           Balance
+        </th>
+        @*<th>
+            Reconciled Balance
+        </th>*@
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Household.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Balance)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.ReconciledBalance)
+        </td>*@
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,181 @@
+﻿@model FinancialApp.Models.FinancialAccount
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@*<h2>Details</h2>*@
+
+<div>
+    <h4>FinancialAccount</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+           Household:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Household.Name)
+        </dd>
+
+        <dt>
+            Fin.Account:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+       
+        <dt>
+          Balance:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Balance)
+        </dd>
+
+        <dt>
+           Reconciled Amount:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReconciledBalance)
+        </dd>
+
+    </dl>
+</div>
+@Html.ActionLink("Add a new transaction", "Create", "Transactions", new { id = Model.Id }, null)
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Posted Date
+            </th>
+            <th>
+               Transaction Date
+            </th>
+            
+            <th>
+              Category
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+               Amount
+            </th>
+            <th>
+                Income
+            </th>
+            <th>
+                Expense
+            </th>
+            @*<th>
+                Reconciled:
+            </th>*@
+            <th>
+                Reconciled Amount
+            </th>
+            <th>
+              Created by
+            </th>
+            <th>
+                Action
+            </th>
+          
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.Transactions)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+
+                <td>
+                    @if (item.Type)
+                    {
+                        @*<input type="checkbox" checked="@item.Type" />*@
+                        @Html.DisplayFor(modelItem => item.Type)
+                    }
+                </td>
+                <td>
+                @if (!item.Type)
+                {
+                    <input type = "checkbox" disabled checked= "checked" />
+                    @*@Html.DisplayFor(modelItem => item.Type)*@
+                }
+                </td>
+                @*<td>
+   
+                    @Html.DisplayFor(modelItem => item.Reconciled)
+                </td>*@
+                <td>
+                 
+                    @Html.DisplayFor(modelItem => item.ReconciledAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EnteredBy.FirstName)
+                </td>
+
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", "Transactions", new { id = item.Id }, null) |*@
+                    <a href="@Url.Action("Edit", "Transactions",new { id = item.Id })"><img class="" src="~/Helpers/Images/Edit.png" style="height:20px;width:20px" /></a>
+                    @*@Html.ActionLink("Delete", "Delete", "Transactions", new { id = item.Id }, null)*@ 
+                    <a href="@Url.Action("Delete", "Transactions",new { id = item.Id })"><img class="" src="~/Helpers/Images/Delete.png" style="height:20px;width:20px" /></a>
+
+                </td>
+
+                @*<td>
+                        @item.Created.Date.ToString("MM/dd/yyyy")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Updated)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.TicketType)
+                    </td>*@
+                @*<td>
+
+                        @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "btn btn-success" })
+                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Developer"))
+                        {
+                            <span> |</span>
+
+                                @Html.ActionLink("Delete", "Delete", "Tickets", new { id = item.Id }, new { @class = "btn btn-success" })
+                                @Html.ActionLink("Edit", "Edit", "Tickets", new { id = item.Id }, new { @class = "btn btn-success" })
+
+
+                        }
+
+                    </td>*@
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |*@
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,108 @@
+﻿@model IEnumerable<FinancialApp.Models.Transaction>
+
+@{
+    ViewBag.Title = "Index";
+}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" type="text/css" />
+<h2> All transactions</h2>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<table class="table">
+    <tr>
+        <th>
+            Account Name
+        </th>
+        <th>
+           Category
+        </th>
+        <th>
+          Transaction created by
+        </th>
+        <th>
+           Description
+        </th>
+        <th>
+            Amount
+        </th>
+        <th>
+            Action
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReconciledAmount)
+        </th>*@
+        @*<th></th>*@
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Account.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Category.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EnteredBy.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        @*<td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReconciledAmount)
+            </td>*@
+        @if (item.IsVoid)
+        {
+            <td>
+                <img class="" src="~/Helpers/Images/void.jpeg" style="height:20px;width:60px"/>
+            </td>
+        }
+        else
+        {
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
+                <a href="@Url.Action("Edit", "Transactions",new { id = item.Id })"><img class="" src="~/Helpers/Images/Edit.png" style="height:20px;width:20px" /></a> |
+                <a href="@Url.Action("Details", "Transactions",new { id = item.Id })"><img class="" src="~/Helpers/Images/Detail.svg" style="height:20px;width:20px" /></a> |
+                <a href="@Url.Action("Delete", "Transactions",new { id = item.Id })"><img class="" src="~/Helpers/Images/Delete.png" style="height:20px;width:20px" /></a> |
+                <a href="@Url.Action("Void", "Transactions",new { id = item.Id })"><img class="" src="~/Helpers/Images/void.jpeg" style="height:20px;width:20px" /></a> 
+            </td>
+
+        }
+    </tr>
+}
+
+</table>
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable();
+        });
+    </script>
+
+}
