@@ -1,349 +1,223 @@
 ﻿@model FinancialApp.Models.Household
 
-<div class="content-i">
-    <div class="content-box">
-        <div class="row">
-            @*<h6 class="element-header">
-                Household Dashboard
-            </h6>*@
-            <div class="element-content">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="col-md-12">
-                            <h6 class="element-header">
-                                Household Members
-                            </h6>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var user in Model.Users)
-                                    {
-                                        <tr>
-                                            <td>@user.DisplayName</td>
-                                            <td>@user.Email</td>
-                                        </tr>
-                                    }
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Financial App</h4>
+    </div>
+    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button>
+        <ol class="breadcrumb">
+            <li><a href="#">Dashboard</a></li>
+            <li class="active">@Model.Name Household</li>
+        </ol>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-8">
+        <div class="white-box">
+            <div class="row">
+                <div class="col-md-12">
+                    <h6 class="element-header">
+                        Household Members
+                    </h6>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model.Users)
+                            {
+                            <tr>
+                                <td>@user.DisplayName</td>
+                                <td>@user.Email</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-                                </tbody>
+        <div class="white-box">
+            <div class="row">
+                <div class="col-md-12">
+                    <h6 class="element-header">
+                        Accounts
+                    </h6>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>
+                                Account
+                            </th>
+                            <th>
+                                Balance
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                        @foreach (var item in Model.FinancialAccounts)
+            {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Balance)
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.ReconciledBalance)
+                                </td>*@
+                            <td>
+                                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
+                                @*@Html.ActionLink("Details", "Details",  new { id = item.Id })*@
+                                <a href="@Url.Action("Details", "FinancialAccounts",new { id = item.Id })"><img class="" src="~/Helpers/Images/Detail.svg" style="height:20px;width:20px" /></a>
+                            </td>
+                        </tr>
+                            }
+                    </table>
+                </div>
+            </div>
+        </div>
 
-                            </table>
-                        </div>            
-
-                    </div>
-                    <div class="col-md-6">
-                        <div class="col-md-12">
-                            <h6 class="element-header">
-                                Accounts
-                            </h6>
-                            <table class="table table-bordered">
+        <div class="white-box">
+            <div class="row">
+                <div class="col-md-12">
+                    <h6 class="element-header">
+                        Recent Transactions
+                    </h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
                                 <tr>
+                                    @*<th class="text-center">
+                                            <input class="form-control" type="checkbox">
+                                        </th>*@
                                     <th>
-                                        Account
+                                        Account Name
                                     </th>
                                     <th>
-                                        Balance
+                                        Category
+                                    </th>
+                                    <th>
+                                        creater
+                                    </th>
+                                    <th>
+                                        Description
+                                    </th>
+                                    <th>
+                                        Amount
                                     </th>
                                     <th>
                                         Action
                                     </th>
                                 </tr>
-
-                                @foreach (var item in Model.FinancialAccounts)
-            {
-                                    <tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.FinancialAccounts.SelectMany(t => t.Transactions).OrderByDescending(d => d.Date).Take(5))
+                                {
+                                <tr>
+                                    @*<td class="text-center">
+                                            <input class="form-control" type="checkbox">
+                                        </td>*@
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Account.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Category.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EnteredBy.FirstName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    @if (item.IsVoid)
+                                        {
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Name)
+                                            <img class="" src="~/Helpers/Images/void.jpeg" style="height:20px;width:60px" />
                                         </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Balance)
+                                        }
+                                        else
+                                        {
+                                        <td class="row-actions" style="width:180px">
+                                            <a href="@Url.Action("Edit", "Transactions",new { id = item.Id })"><i class="fa fa-pencil-square-o"></i></a>
+                                            <a href="@Url.Action("Details", "Transactions",new { id = item.Id })"><i class="mdi mdi-clipboard-text fa-fw"></i></a>
+                                            <a href="@Url.Action("Void", "Transactions",new { id = item.Id })"><img class="" src="~/Helpers/Images/void.jpeg" style="height:20px;width:40px" /></a>
                                         </td>
-                                        @*<td>
-                                                @Html.DisplayFor(modelItem => item.ReconciledBalance)
-                                            </td>*@
-                                        <td>
-                                            @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
-                                            @*@Html.ActionLink("Details", "Details",  new { id = item.Id })*@               
-                                            <a href="@Url.Action("Details", "FinancialAccounts",new { id = item.Id })"><img class="" src="~/Helpers/Images/Detail.svg" style="height:20px;width:20px" /></a> 
-             
-                                         
-                                        </td>
-                                    </tr>
+                                        }
+                                </tr>
                                 }
-
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
-                <div class="row">
-
-                    @*<h3>Invite</h3>
-                    <p> <em>Invite New User to join Household</em></p>*@
-
-                    @using (Html.BeginForm("Invite", "Households", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="white-box">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Leave</h3>
+                    <p class="col-xs-12 text-danger">@ViewBag.Error</p>
+                    <p>Leave your current household and start another one.</p>
+                    @using (Html.BeginForm("LeaveHousehold", "Households"))
                     {
                         @Html.AntiForgeryToken()
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.Id)
 
-                        @*<div class="form-horizontal">*@
-                        @*<div class="row">
-                            <div class="col-md-6">
-                                <div class="col-md-12">
-                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-
-                                    <div class="form-group">
-                                        <label for="inviteEmail" class="control-label col-md-1">Email</label>
-                                        <div class="col-md-4">
-                                            <input type="text" name="email" id="inviteEmail" class="form-control" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-offset-2">
-                                            <input type="submit" value="Send Invitation" class="btn btn-default" />
-                                        </div>
-                                    </div>
+                            <div class="form-group col-xs-12">
+                                <input type="checkbox" name="confirmLeaveHousehold" value="true" class="col-xs-1" />
+                                <p class="col-xs-11">I understand that I will no longer have access to my current household's accounts.</p>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-11">
+                                    <input type="submit" value="Leave Household" class="btn btn-default" />
                                 </div>
                             </div>
-                        </div>*@
+                        </div>
                     }
-
-                    @section Scripts {
-                        @Scripts.Render("~/bundles/jqueryval")
-                    }
-
-                    <div class="col-md-6">
-                        <div class="col-md-12">
-                            <h6 class="element-header">
-                                Recent Transactions
-                            </h6>
-                            @*<table class="table table-bordered">
-                                        <tr>
-                                            <th>
-                                                Account Name
-                                            </th>
-                                            <th>
-                                                Category
-                                            </th>
-                                            <th>
-                                                Transaction created by
-                                            </th>
-                                            <th>
-                                                Description
-                                            </th>
-                                            <th>
-                                                Amount
-                                            </th>
-                                            <th>
-                                                Action
-                                            </th>
-
-                                        </tr>
-                                        @*same as : var RecentTransactions = db.FinancialAccounts
-                                            .Where(h=>h.HouseholdId == User.Identity.GetHouseholdId())
-                                            .SelectMany(t=>t.Transactions)
-                                            .OrderByDescending(t => t.Date).Take(5);
-                                        @*Jya muri Db muri tableau ya transaction unzanire transactions
-                                            eshanu zanyuma aho muri HH ihuye nuwaloginze in
-                                        @foreach (var item in Model.FinancialAccounts.SelectMany(t => t.Transactions).OrderByDescending(d => d.Date).Take(5))
-                                {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Account.Name)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Category.Name)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.EnteredBy.FirstName)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Description)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Amount)
-                                                </td>
-                                                @if (item.IsVoid)
-                                                {
-                                                    <td>
-                                                        <img class="" src="~/Helpers/Images/void.jpeg" style="height:20px;width:60px" />
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    <td>
-                                                        <a href="@Url.Action("Edit", "Transactions",new { id = item.Id })"><img class="" src="~/Helpers/Images/Edit.png" style="height:20px;width:20px" /></a>
-                                                        <a href="@Url.Action("Details", "Transactions",new { id = item.Id })"><img class="" src="~/Helpers/Images/Detail.svg" style="height:20px;width:20px" /></a>
-                                                        <a href="@Url.Action("Delete", "Transactions",new { id = item.Id })"><img class="" src="~/Helpers/Images/Delete.png" style="height:20px;width:20px" /></a>
-                                                        <a href="@Url.Action("Void", "Transactions",new { id = item.Id })"><img class="" src="~/Helpers/Images/void.jpeg" style="height:20px;width:20px" /></a>
-                                                    </td>
-
-                                                }
-                                            </tr>
-                                        }
-                                    </table>*@
-                        </div>
-                    </div>
-                    <div class="element-box-tp">
-                        <div class="controls-above-table">
-                            @*<div class="row">
-                                <div class="col-sm-6">
-                                    <a class="btn btn-sm btn-secondary" href="#">Download CSV</a><a class="btn btn-sm btn-secondary" href="#">Archive</a><a class="btn btn-sm btn-danger" href="#">Delete</a>
-                                </div>
-                                <div class="col-sm-6">
-                                    <form class="form-inline justify-content-sm-end">
-                                        <input class="form-control form-control-sm rounded bright" placeholder="Search" type="text"><select class="form-control form-control-sm rounded bright">
-                                            <option selected="selected" value="">
-                                                Select Status
-                                            </option>
-                                            <option value="Pending">
-                                                Pending
-                                            </option>
-                                            <option value="Active">
-                                                Active
-                                            </option>
-                                            <option value="Cancelled">
-                                                Cancelled
-                                            </option>
-                                        </select>
-                                    </form>
-                                </div>
-                            </div>*@
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-lg table-v2 table-striped">
-                                <thead>
-                                    <tr>
-                                        @*<th class="text-center">
-                                            <input class="form-control" type="checkbox">
-                                        </th>*@
-
-                                        <th>
-                                            Account Name
-                                        </th>
-                                        <th>
-                                            Category
-                                        </th>
-                                        <th>
-                                            creater
-                                        </th>
-                                        <th>
-                                            Description
-                                        </th>
-                                        <th>
-                                            Amount
-                                        </th>
-                                        <th>
-                                            Action
-                                        </th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.FinancialAccounts.SelectMany(t => t.Transactions).OrderByDescending(d => d.Date).Take(5))
-            {
-                                        <tr>
-                                            @*<td class="text-center">
-                                                <input class="form-control" type="checkbox">
-                                            </td>*@
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Account.Name)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Category.Name)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.EnteredBy.FirstName)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Description)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Amount)
-                                            </td>
-                                            @if (item.IsVoid)
-                                            {
-                                                <td>
-                                                    <img class="" src="~/Helpers/Images/void.jpeg" style="height:20px;width:60px" />
-                                                </td>
-                                            }
-                                            else
-                                            {
-
-                                                <td class="row-actions" style="width:180px">
-                                                    <a href="@Url.Action("Edit", "Transactions",new { id = item.Id })"><i class="os-icon os-icon-pencil-2"></i></a>
-                                                    <a href="@Url.Action("Details", "Transactions",new { id = item.Id })"><i class="os-icon os-icon-link-3"></i></a>
-                                                    <a href="@Url.Action("Void", "Transactions",new { id = item.Id })"><img class="" src="~/Helpers/Images/void.jpeg" style="height:20px;width:40px" /></a>
-                                                </td>
-                                            }
-                                        </tr>
-                                    }
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="controls-below-table">
-                            <div class="table-records-info">
-                                Showing records 1 - 5
-                            </div>
-                            <div class="table-records-pages">
-                                <ul>
-                                    <li>
-                                        <a href="#">Previous</a>
-                                    </li>
-                                    <li>
-                                        <a class="current" href="#">1</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">2</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">3</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">4</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Next</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
-
-
-                @*<div class="row">
-                    <div class="col-md-12">
-                        <h3>Leave</h3>
-                        <p class="col-xs-12 text-danger">@ViewBag.Error</p>
-                        <p>Leave your current household and start another one.</p>
-                        @using (Html.BeginForm("LeaveHousehold", "Households"))
-            {
-                            @Html.AntiForgeryToken()
-                            <div class="form-horizontal">
-                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                @Html.HiddenFor(model => model.Id)
-
-                                <div class="form-group col-xs-12">
-                                    <input type="checkbox" name="confirmLeaveHousehold" value="true" class="col-xs-1" />
-                                    <p class="col-xs-10">I understand that I will no longer have access to my current household's accounts.</p>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-11">
-                                        <input type="submit" value="Leave Household" class="btn btn-default" />
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>*@
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+@*<div class="row">
+            <div class="col-md-12">
+                <h3>Leave</h3>
+                <p class="col-xs-12 text-danger">@ViewBag.Error</p>
+                <p>Leave your current household and start another one.</p>
+                @using (Html.BeginForm("LeaveHousehold", "Households"))
+    {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.Id)
+
+                        <div class="form-group col-xs-12">
+                            <input type="checkbox" name="confirmLeaveHousehold" value="true" class="col-xs-1" />
+                            <p class="col-xs-10">I understand that I will no longer have access to my current household's accounts.</p>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-11">
+                                <input type="submit" value="Leave Household" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>*@
